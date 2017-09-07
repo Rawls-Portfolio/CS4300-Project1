@@ -1,0 +1,82 @@
+File: README
+Author: Amanda Rawls
+Date: 2/11/2017
+Project: Missionaries and Cannibals
+Class: CS4300
+Professor: Dr. Mark Hauschild
+
+This project is to implement the Missionaries and Cannibals problem.
+Three missionaries and three cannibals are on one side of a river, along with a boat that can
+hold one or two people. Find a way to get everyone to the other side without ever leaving a group 
+of missionaries in one place outnumbered by the cannibals in that place.
+
+This project uses iterative deepening to search for a solution or say it did not find a solution. 
+This program presents the entire solution.
+
+FILE CONTENTS
+-----------------
+IterativeDeepening (class)
+	main(String[]) : void
+		runs the iterative deepening algorithm
+	printTrace(Deque<List<List<Integer>>>) : void
+		prints the results given by TreeSearch.traceSolution
+	
+	
+ProblemFormulation<T> (interface)
+	action(T) : List<T>
+		given a state, returns a list of valid actions
+	result(T, T) : T
+		given a state and an action, returns the result
+	goalTest(T) : boolean
+		given a state, compares it to the goalState
+	pathCost(T, T) : Integer
+		returns the cost of the parent + cost of the action
+		
+	
+		I made this interface with the hope to try other problem formulations in the future
+		This way the Cannibals class is only loosely connected to the program
+	
+	
+Cannibals (class implements ProblemFormulation)
+	Cannibals(List<Integer>)
+		constructor
+	action(List<Integer>) : List<List<Integer>
+		creates a list of action choices, then checks each result for validity
+	result(List<Integer>, List<Integer>) : List<Integer>
+		verifies that the Integers in the new state are is valid
+		There are no conflicts if all the missionaries are together
+		but if the missionaries are split, there are no conflicts only 
+		if there are an equal number of cannibals with them
+	goalTest(List<Integer>) : boolean
+		iterates over the List<Integers> and returns true if they all match
+	pathCost(List<Integer>, List<Integer>) : Integer
+		in this program, the cost is uniform
+		this this case, the cost is set to 1 and this tracks the depth of the tree
+	
+TreeSearch (class)
+	boolean EnableMappedStates
+		set this to true to have the tree remember states it has already seen and avoid expanding them
+		this was immensely helpful while debugging
+		
+	TreeSearch(ProblemFormulation<T>, T, Integer)
+		constructor which creates the root SearchNode
+	treeSearch() : List<Integer>
+		adds the root to the frontier
+		enters a loop which removes the first item from the frontier, 
+		expands it to valid new nodes, and adds them to the frontier
+	traceSolution(SearchNode<?>) : Deque<List<List<Integer>>>
+		Starts with the node where the goal was found, and then traces it's way back to the root.
+		The action and states of each node are added to a list
+		Then that list is added to the deque.
+	
+SearchNode (class)
+	SearchNode(ProblemFormulation<T>, T)
+		root constructor
+	SearchNode(ProblemFormulation<T>, SearchNode<?>, T)
+		child constructor, only to be called from childNode
+	childNode(ProblemFormulation<T>, T) : SearchNode
+		creates a childNode and returns it
+	getParent() : SearchNode
+	getPathCost() : Integer
+	getState() : List<Integer>
+	getAction() : List<Integer>

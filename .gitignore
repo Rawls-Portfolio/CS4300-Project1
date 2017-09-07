@@ -25,3 +25,10 @@ hs_err_pid*
 .settings/
 .classpath
 .project
+
+# project specific files
+/Cannibals.class
+/IterativeDeepening.class
+/ProblemFormulation.class
+/SearchNode.class
+/TreeSearch.class
